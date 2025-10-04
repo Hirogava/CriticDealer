@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/Hirogava/ParkingDealer/internal/models/routresponse"
 	"github.com/Hirogava/ParkingDealer/internal/repository/postgres/api"
@@ -57,7 +58,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 		return
 	}
 
-	weatherResp, err := http.Get(fmt.Sprintf("https://api.openweathermap.org/data/3.0/onecall?lat=%g&lon=%g&appid=%s", apiResponse.Query.Points[0].Lat, apiResponse.Query.Points[0].Lon, "7e8a6ed72cffae478833bb79e3f7e194"))
+	weatherResp, err := http.Get(fmt.Sprintf("https://api.openweathermap.org/data/3.0/onecall?lat=%g&lon=%g&appid=%s", apiResponse.Query.Points[0].Lat, apiResponse.Query.Points[0].Lon, os.Getenv("WEATHER_KEY")))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch from external API"})
 		return
@@ -76,7 +77,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 		return
 	}
 
-	coordinatesResp, err := http.Get(fmt.Sprintf("https://catalog.api.2gis.com/3.0/items/geocode?lat=%g&lon=%g&fields=items.point&key=%s", apiResponse.Query.Points[0].Lat, apiResponse.Query.Points[0].Lon, "52e0e0ae-e911-4c14-9359-e53ab161888a"))
+	coordinatesResp, err := http.Get(fmt.Sprintf("https://catalog.api.2gis.com/3.0/items/geocode?lat=%g&lon=%g&fields=items.point&key=%s", apiResponse.Query.Points[0].Lat, apiResponse.Query.Points[0].Lon, os.Getenv("2GIS_KEY")))
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch from external API"})
 		return
