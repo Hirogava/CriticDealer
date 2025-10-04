@@ -8,8 +8,17 @@ import (
 	migrations "github.com/Hirogava/ParkingDealer/internal/repository/postgres"
 	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 	router "github.com/Hirogava/ParkingDealer/internal/transport/http"
+	_ "github.com/Hirogava/ParkingDealer/docs"
+	swaggerFiles "github.com/swaggo/files"    
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+
+// @title SafeRoute API
+// @version 1.0
+// @description SafeRoute API — сервис для построения безопасных маршрутов
+// @host localhost:8080
+// @BasePath /
 func main() {
 	environment.LoadEnvFile(".env")
 
@@ -38,6 +47,7 @@ func main() {
 		logger.Logger.Warn("SERVER_PORT not set, using default port 8080")
 	}
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	logger.Logger.Info("Starting HTTP server", "port", serverPort)
 	if err := r.Run(serverPort); err != nil {
 		logger.Logger.Fatal("Failed to start HTTP server", "error", err)

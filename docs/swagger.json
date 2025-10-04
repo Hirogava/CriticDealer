@@ -1,0 +1,526 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "SafeRoute API — сервис для построения безопасных маршрутов",
+        "title": "SafeRoute API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/critical": {
+            "get": {
+                "description": "Запрашивает маршрут у 2GIS, получает погоду и рассчитывает опасность участков",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "routes"
+                ],
+                "summary": "Получить безопасный маршрут с анализом аварийности",
+                "parameters": [
+                    {
+                        "description": "JSON-запрос для API 2GIS",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Успешный анализ маршрута",
+                        "schema": {
+                            "$ref": "#/definitions/routresponse.RouteResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Ошибка в данных запроса",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Ошибка обработки маршрута или внешнего API",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "routresponse.AltitudesInfo": {
+            "type": "object",
+            "properties": {
+                "elevation_gain": {
+                    "type": "integer"
+                },
+                "elevation_loss": {
+                    "type": "integer"
+                },
+                "max_altitude": {
+                    "type": "integer"
+                },
+                "max_road_angle": {
+                    "type": "integer"
+                },
+                "min_altitude": {
+                    "type": "integer"
+                }
+            }
+        },
+        "routresponse.Exclude": {
+            "type": "object",
+            "required": [
+                "points",
+                "severity",
+                "type"
+            ],
+            "properties": {
+                "extent": {
+                    "type": "integer"
+                },
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.LatLon"
+                    }
+                },
+                "severity": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.Features": {
+            "type": "object",
+            "properties": {
+                "truck": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.Geometry": {
+            "type": "object",
+            "properties": {
+                "selection": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.GeometryElement": {
+            "type": "object",
+            "properties": {
+                "angles": {
+                    "type": "string"
+                },
+                "color": {
+                    "type": "string"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "selection": {
+                    "type": "string"
+                },
+                "style": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.GeometryWrapper": {
+            "type": "object",
+            "properties": {
+                "geometry": {
+                    "$ref": "#/definitions/routresponse.Geometry"
+                }
+            }
+        },
+        "routresponse.LatLon": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lon": {
+                    "type": "number"
+                }
+            }
+        },
+        "routresponse.Maneuver": {
+            "type": "object",
+            "properties": {
+                "comment": {
+                    "type": "string"
+                },
+                "critical": {
+                    "type": "boolean"
+                },
+                "critical_probability": {
+                    "type": "number"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "outcoming_path": {
+                    "$ref": "#/definitions/routresponse.OutcomingPath"
+                },
+                "outcoming_path_comment": {
+                    "type": "string"
+                },
+                "ringroad_exit_number": {
+                    "type": "integer"
+                },
+                "turn_angle": {
+                    "type": "integer"
+                },
+                "turn_direction": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.OutcomingPath": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "type": "integer"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "geometry": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.GeometryElement"
+                    }
+                },
+                "names": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "routresponse.Params": {
+            "type": "object",
+            "properties": {
+                "pedestrian": {
+                    "$ref": "#/definitions/routresponse.Pedestrian"
+                },
+                "truck": {
+                    "$ref": "#/definitions/routresponse.Truck"
+                }
+            }
+        },
+        "routresponse.Pedestrian": {
+            "type": "object",
+            "properties": {
+                "use_indoor": {
+                    "type": "boolean"
+                },
+                "use_instructions": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "routresponse.Query": {
+            "type": "object",
+            "required": [
+                "points"
+            ],
+            "properties": {
+                "allow_locked_roads": {
+                    "type": "boolean"
+                },
+                "alternative": {
+                    "type": "integer"
+                },
+                "exclude": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.Exclude"
+                    }
+                },
+                "filters": {
+                    "type": "object",
+                    "properties": {
+                        "filter": {
+                            "type": "string"
+                        },
+                        "filters": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "locale": {
+                    "type": "string"
+                },
+                "need_altitudes": {
+                    "type": "boolean"
+                },
+                "output": {
+                    "type": "string"
+                },
+                "params": {
+                    "$ref": "#/definitions/routresponse.Params"
+                },
+                "points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.QueryPoint"
+                    }
+                },
+                "route_mode": {
+                    "type": "string"
+                },
+                "traffic_mode": {
+                    "type": "string"
+                },
+                "transport": {
+                    "type": "string"
+                },
+                "utc": {
+                    "type": "integer"
+                }
+            }
+        },
+        "routresponse.QueryPoint": {
+            "type": "object",
+            "properties": {
+                "lat": {
+                    "type": "number"
+                },
+                "lon": {
+                    "type": "number"
+                },
+                "object_id": {
+                    "type": "string"
+                },
+                "start": {
+                    "type": "boolean"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.ResultItem": {
+            "type": "object",
+            "properties": {
+                "algorithm": {
+                    "type": "string"
+                },
+                "altitudes_info": {
+                    "$ref": "#/definitions/routresponse.AltitudesInfo"
+                },
+                "are_locked_roads_ignored": {
+                    "type": "boolean"
+                },
+                "are_truck_pass_zones_ignored": {
+                    "type": "boolean"
+                },
+                "begin_pedestrian_path": {
+                    "$ref": "#/definitions/routresponse.GeometryWrapper"
+                },
+                "end_pedestrian_path": {
+                    "$ref": "#/definitions/routresponse.GeometryWrapper"
+                },
+                "features": {
+                    "$ref": "#/definitions/routresponse.Features"
+                },
+                "filter_road_types": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "id": {
+                    "type": "string"
+                },
+                "maneuvers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.Maneuver"
+                    }
+                },
+                "reliability": {
+                    "type": "number"
+                },
+                "requested_filters": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "requested_hard_filters": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "result_filters": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "route_id": {
+                    "type": "string"
+                },
+                "route_points": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.RoutePoint"
+                    }
+                },
+                "total_distance": {
+                    "type": "integer"
+                },
+                "total_duration": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "ui_total_distance": {
+                    "$ref": "#/definitions/routresponse.UIDistance"
+                },
+                "ui_total_duration": {
+                    "type": "string"
+                },
+                "visited_pass_zone_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "waypoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.Waypoint"
+                    }
+                }
+            }
+        },
+        "routresponse.RoutePoint": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.RouteResponse": {
+            "type": "object",
+            "required": [
+                "query",
+                "status",
+                "type"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "query": {
+                    "$ref": "#/definitions/routresponse.Query"
+                },
+                "result": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/routresponse.ResultItem"
+                    }
+                },
+                "status": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "routresponse.Truck": {
+            "type": "object",
+            "properties": {
+                "axle_load": {
+                    "type": "integer"
+                },
+                "dangerous_cargo": {
+                    "type": "boolean"
+                },
+                "explosive_cargo": {
+                    "type": "boolean"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "length": {
+                    "type": "integer"
+                },
+                "mass": {
+                    "type": "integer"
+                },
+                "max_perm_mass": {
+                    "type": "integer"
+                },
+                "pass_zone_pass_ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "weight": {
+                    "type": "integer"
+                }
+            }
+        },
+        "routresponse.UIDistance": {
+            "type": "object",
+            "properties": {
+                "unit": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "number"
+                }
+            }
+        },
+        "routresponse.Waypoint": {
+            "type": "object",
+            "properties": {
+                "original_point": {
+                    "$ref": "#/definitions/routresponse.LatLon"
+                },
+                "projected_point": {
+                    "$ref": "#/definitions/routresponse.LatLon"
+                },
+                "transit": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

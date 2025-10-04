@@ -23,6 +23,17 @@ func InitParams(r *gin.Engine, manager *api.Manager) {
 	}
 }
 
+// GetCritical обрабатывает запрос на безопасный маршрут
+// @Summary Получить безопасный маршрут с анализом аварийности
+// @Description Запрашивает маршрут у 2GIS, получает погоду и рассчитывает опасность участков
+// @Tags routes
+// @Accept json
+// @Produce json
+// @Param request body map[string]interface{} true "JSON-запрос для API 2GIS"
+// @Success 200 {object} routresponse.RouteResponse "Успешный анализ маршрута"
+// @Failure 400 {string} string "Ошибка в данных запроса"
+// @Failure 500 {string} string "Ошибка обработки маршрута или внешнего API"
+// @Router /api/v1/critical [get]
 func GetCritical(ctx *gin.Context, manager *api.Manager) {
 	var response map[string]interface{}
 

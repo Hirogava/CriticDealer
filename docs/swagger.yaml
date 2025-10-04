@@ -1,0 +1,346 @@
+basePath: /
+definitions:
+  routresponse.AltitudesInfo:
+    properties:
+      elevation_gain:
+        type: integer
+      elevation_loss:
+        type: integer
+      max_altitude:
+        type: integer
+      max_road_angle:
+        type: integer
+      min_altitude:
+        type: integer
+    type: object
+  routresponse.Exclude:
+    properties:
+      extent:
+        type: integer
+      points:
+        items:
+          $ref: '#/definitions/routresponse.LatLon'
+        type: array
+      severity:
+        type: string
+      type:
+        type: string
+    required:
+    - points
+    - severity
+    - type
+    type: object
+  routresponse.Features:
+    properties:
+      truck:
+        type: string
+    type: object
+  routresponse.Geometry:
+    properties:
+      selection:
+        type: string
+    type: object
+  routresponse.GeometryElement:
+    properties:
+      angles:
+        type: string
+      color:
+        type: string
+      length:
+        type: integer
+      selection:
+        type: string
+      style:
+        type: string
+    type: object
+  routresponse.GeometryWrapper:
+    properties:
+      geometry:
+        $ref: '#/definitions/routresponse.Geometry'
+    type: object
+  routresponse.LatLon:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+    type: object
+  routresponse.Maneuver:
+    properties:
+      comment:
+        type: string
+      critical:
+        type: boolean
+      critical_probability:
+        type: number
+      icon:
+        type: string
+      id:
+        type: string
+      outcoming_path:
+        $ref: '#/definitions/routresponse.OutcomingPath'
+      outcoming_path_comment:
+        type: string
+      ringroad_exit_number:
+        type: integer
+      turn_angle:
+        type: integer
+      turn_direction:
+        type: string
+      type:
+        type: string
+    type: object
+  routresponse.OutcomingPath:
+    properties:
+      distance:
+        type: integer
+      duration:
+        type: integer
+      geometry:
+        items:
+          $ref: '#/definitions/routresponse.GeometryElement'
+        type: array
+      names:
+        items:
+          type: string
+        type: array
+    type: object
+  routresponse.Params:
+    properties:
+      pedestrian:
+        $ref: '#/definitions/routresponse.Pedestrian'
+      truck:
+        $ref: '#/definitions/routresponse.Truck'
+    type: object
+  routresponse.Pedestrian:
+    properties:
+      use_indoor:
+        type: boolean
+      use_instructions:
+        type: boolean
+    type: object
+  routresponse.Query:
+    properties:
+      allow_locked_roads:
+        type: boolean
+      alternative:
+        type: integer
+      exclude:
+        items:
+          $ref: '#/definitions/routresponse.Exclude'
+        type: array
+      filters:
+        properties:
+          filter:
+            type: string
+          filters:
+            items:
+              type: string
+            type: array
+        type: object
+      locale:
+        type: string
+      need_altitudes:
+        type: boolean
+      output:
+        type: string
+      params:
+        $ref: '#/definitions/routresponse.Params'
+      points:
+        items:
+          $ref: '#/definitions/routresponse.QueryPoint'
+        type: array
+      route_mode:
+        type: string
+      traffic_mode:
+        type: string
+      transport:
+        type: string
+      utc:
+        type: integer
+    required:
+    - points
+    type: object
+  routresponse.QueryPoint:
+    properties:
+      lat:
+        type: number
+      lon:
+        type: number
+      object_id:
+        type: string
+      start:
+        type: boolean
+      type:
+        type: string
+    type: object
+  routresponse.ResultItem:
+    properties:
+      algorithm:
+        type: string
+      altitudes_info:
+        $ref: '#/definitions/routresponse.AltitudesInfo'
+      are_locked_roads_ignored:
+        type: boolean
+      are_truck_pass_zones_ignored:
+        type: boolean
+      begin_pedestrian_path:
+        $ref: '#/definitions/routresponse.GeometryWrapper'
+      end_pedestrian_path:
+        $ref: '#/definitions/routresponse.GeometryWrapper'
+      features:
+        $ref: '#/definitions/routresponse.Features'
+      filter_road_types:
+        items:
+          type: string
+        type: array
+      id:
+        type: string
+      maneuvers:
+        items:
+          $ref: '#/definitions/routresponse.Maneuver'
+        type: array
+      reliability:
+        type: number
+      requested_filters:
+        items:
+          type: string
+        type: array
+      requested_hard_filters:
+        items:
+          type: string
+        type: array
+      result_filters:
+        items:
+          type: string
+        type: array
+      route_id:
+        type: string
+      route_points:
+        items:
+          $ref: '#/definitions/routresponse.RoutePoint'
+        type: array
+      total_distance:
+        type: integer
+      total_duration:
+        type: integer
+      type:
+        type: string
+      ui_total_distance:
+        $ref: '#/definitions/routresponse.UIDistance'
+      ui_total_duration:
+        type: string
+      visited_pass_zone_ids:
+        items:
+          type: integer
+        type: array
+      waypoints:
+        items:
+          $ref: '#/definitions/routresponse.Waypoint'
+        type: array
+    type: object
+  routresponse.RoutePoint:
+    properties:
+      name:
+        type: string
+      type:
+        type: string
+    type: object
+  routresponse.RouteResponse:
+    properties:
+      message:
+        type: string
+      query:
+        $ref: '#/definitions/routresponse.Query'
+      result:
+        items:
+          $ref: '#/definitions/routresponse.ResultItem'
+        type: array
+      status:
+        type: string
+      type:
+        type: string
+    required:
+    - query
+    - status
+    - type
+    type: object
+  routresponse.Truck:
+    properties:
+      axle_load:
+        type: integer
+      dangerous_cargo:
+        type: boolean
+      explosive_cargo:
+        type: boolean
+      height:
+        type: integer
+      length:
+        type: integer
+      mass:
+        type: integer
+      max_perm_mass:
+        type: integer
+      pass_zone_pass_ids:
+        items:
+          type: integer
+        type: array
+      weight:
+        type: integer
+    type: object
+  routresponse.UIDistance:
+    properties:
+      unit:
+        type: string
+      value:
+        type: number
+    type: object
+  routresponse.Waypoint:
+    properties:
+      original_point:
+        $ref: '#/definitions/routresponse.LatLon'
+      projected_point:
+        $ref: '#/definitions/routresponse.LatLon'
+      transit:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: SafeRoute API — сервис для построения безопасных маршрутов
+  title: SafeRoute API
+  version: "1.0"
+paths:
+  /api/v1/critical:
+    get:
+      consumes:
+      - application/json
+      description: Запрашивает маршрут у 2GIS, получает погоду и рассчитывает опасность
+        участков
+      parameters:
+      - description: JSON-запрос для API 2GIS
+        in: body
+        name: request
+        required: true
+        schema:
+          additionalProperties: true
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Успешный анализ маршрута
+          schema:
+            $ref: '#/definitions/routresponse.RouteResponse'
+        "400":
+          description: Ошибка в данных запроса
+          schema:
+            type: string
+        "500":
+          description: Ошибка обработки маршрута или внешнего API
+          schema:
+            type: string
+      summary: Получить безопасный маршрут с анализом аварийности
+      tags:
+      - routes
+swagger: "2.0"
