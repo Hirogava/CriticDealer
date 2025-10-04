@@ -19,7 +19,7 @@ CREATE TYPE day_type AS ENUM (
 
 CREATE TABLE accident (
   id serial PRIMARY KEY,
-  movement_id integer,
+  hash BIGINT UNIQUE NOT NULL,
   dtp_time integer,
   month integer,
   traffic integer,

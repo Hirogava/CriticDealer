@@ -1,13 +1,13 @@
 package math
 
 import (
-	"strconv"
-
+	"hash/crc32"
+	
 	dbModel "github.com/Hirogava/ParkingDealer/internal/models/db"
 	models "github.com/Hirogava/ParkingDealer/internal/models/routresponse"
 )
 
-func CountCurrentCriticality(r *models.RouteResponse, criticals map[int][]dbModel.Critical, weather []string) {
+func CountCurrentCriticality(r *models.RouteResponse, criticals map[int64][]dbModel.Critical, weather []string) {
 	for _, route := range r.Result {
 		for i := range route.Maneuvers {
 			m := &route.Maneuvers[i]
@@ -17,7 +17,8 @@ func CountCurrentCriticality(r *models.RouteResponse, criticals map[int][]dbMode
 				length = 1
 			}
 
-			accidents := criticals[routeIndexToMovementID(route.ID)]
+			hash := int64(crc32.ChecksumIEEE([]byte(m.Comment)))
+			accidents := criticals[hash]
 
 			var (
 				totalAccidents          float64
@@ -74,11 +75,4 @@ func matchesCurrentWeather(w string, currentWeather []string) bool {
 	return false
 }
 
-func routeIndexToMovementID(routeID string) int {
-	intID, _ := strconv.Atoi(routeID)
-	return intID
-}
-
-func F32(v float32) *float32 {
-	return &v
-}
+func F32(v float32) *float32 { return &v }
