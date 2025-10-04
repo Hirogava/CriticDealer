@@ -118,11 +118,5 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{
-		"status":  finalResult.Status,
-		"query":   finalResult.Query,
-		"type":    finalResult.Type,
-		"message": finalResult.Message,
-		"result":  finalResult.Result,
-	})
+	ctx.JSON(http.StatusOK, finalResult)
 }
