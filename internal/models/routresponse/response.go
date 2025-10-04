@@ -143,6 +143,7 @@ type Maneuver struct {
 	TurnAngle             *int          `json:"turn_angle" binding:"omitempty"`
 	TurnDirection         *string       `json:"turn_direction" binding:"omitempty"`
 	RingroadExitNumber    *int          `json:"ringroad_exit_number" binding:"omitempty"`
+	Critical              *bool         `json:"critical" binding:"omitempty"`
 }
 
 type OutcomingPath struct {
