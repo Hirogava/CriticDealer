@@ -1,13 +1,14 @@
 package http
 
 import (
-	
+	mgr "github.com/Hirogava/ParkingDealer/internal/repository/postgres/api"
+
 	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 
 	"github.com/gin-gonic/gin"
 )
 
-func CreateRouter() *gin.Engine {
+func CreateRouter(manager *mgr.Manager) *gin.Engine {
 	logger.Logger.Debug("Creating HTTP router")
 
 	r := gin.Default()
