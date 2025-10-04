@@ -5,6 +5,7 @@ import (
 
 	"github.com/Hirogava/ParkingDealer/internal/config/environment"
 	manager "github.com/Hirogava/ParkingDealer/internal/repository/postgres/api"
+	migrations "github.com/Hirogava/ParkingDealer/internal/repository/postgres"
 	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 	router "github.com/Hirogava/ParkingDealer/internal/transport/http"
 )
@@ -23,6 +24,10 @@ func main() {
 
 	manager := manager.NewApiManager("postgres", dbConnStr)
 	logger.Logger.Info("Database connection established successfully")
+
+	logger.Logger.Info("Running database migrations")
+	migrations.Migrate(manager.Conn, "api")
+	logger.Logger.Info("Database migrations completed successfully")
 
 	logger.Logger.Info("Initializing HTTP router")
 	r := router.CreateRouter(manager)
