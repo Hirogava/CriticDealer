@@ -20,10 +20,16 @@ CREATE TYPE day_type AS ENUM (
 CREATE TABLE accident (
   id serial PRIMARY KEY,
   movement_id integer,
-  dtp_time timestamp DEFAULT (now()),
+  dtp_time integer,
   month integer,
   day_type day_type,
   weather_id integer
+);
+
+CREATE TABLE global_accident_statistic (
+    dtp_count integer,
+    dtp_koef decimal(10, 2),
+    region varchar(255)
 );
 
 CREATE TABLE weather (
