@@ -111,7 +111,7 @@ type Alert struct {
 
 type Weather struct {
 	ID          int    `json:"id" binding:"required"`
-	Main        string `json:"main" binding:"required"`
+	Main        []string `json:"main" binding:"required"`
 	Description string `json:"description" binding:"required"`
 	Icon        string `json:"icon" binding:"required"`
 }
