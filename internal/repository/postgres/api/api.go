@@ -8,9 +8,11 @@ import (
 	"github.com/Hirogava/ParkingDealer/internal/service/math"
 	"github.com/Hirogava/ParkingDealer/internal/service/weather"
 	"github.com/lib/pq"
+	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 )
 
 func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.WeatherResponse, ) (*models.RouteResponse, float64, error) {
+	logger.Logger.Info("Starting critical maneuvers analysis")
 	weather := weather.GetCurrentWeather(w)
 	ids := ids.GetCurrentIds(r)
 	dayType, month := funcmonth.WeekdayOrWeekend()
@@ -27,19 +29,25 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 		GROUP BY a.id;
 		`, pq.Array(ids), dayType, pq.Array(weather), funcmonth.GetCurrentHour(), pq.Array(month))
 	if err != nil {
+		logger.Logger.Error("Database query failed", "error", err)
 		return nil, 0, err
 	}
+	logger.Logger.Debug("Database query executed successfully")
+
 
 	var cur []dbModels.Critical
 	for rows.Next() {
 		var c dbModels.Critical
 
 		if err := rows.Scan(&c.ID, pq.Array(&c.Weather), &c.Traffic); err != nil {
+			logger.Logger.Error("Failed to scan database row", "error", err)
 			return nil, 0, err
 		}
 
 		cur = append(cur, c)
 	}
+
+	logger.Logger.Info("Retrieved critical maneuvers from database", "count", len(cur))
 
 	criticals := make(map[int][]dbModels.Critical)
 
@@ -49,10 +57,13 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 
 	var globalKoef float64
 
+	logger.Logger.Debug("Starting criticality calculation")
 	math.CountCurrentCriticality(r, criticals, weather)
+	logger.Logger.Debug("Criticality calculation completed")
 
 	err = manager.Conn.QueryRow(`SELECT dtp_koef FROM global_accident_statistic LIMIT 1`).Scan(&globalKoef)
 	if err != nil {
+		logger.Logger.Error("Failed to get global accident coefficient", "error", err)
 		return nil, 0, err
 	}
 
