@@ -22,6 +22,7 @@ CREATE TABLE accident (
   movement_id integer,
   dtp_time integer,
   month integer,
+  traffic integer,
   day_type day_type,
   weather_id integer
 );

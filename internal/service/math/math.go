@@ -18,10 +18,18 @@ func CountCurrentCriticality(r *models.RouteResponse, criticals map[int][]dbMode
 			}
 
 			accidents := criticals[routeIndexToMovementID(route.ID)]
-			var totalAccidents, clearAccidents, currentWeatherAccidents float64
+
+			var (
+				totalAccidents          float64
+				clearAccidents          float64
+				currentWeatherAccidents float64
+				totalTraffic            float64
+			)
 
 			for _, acc := range accidents {
 				totalAccidents++
+				totalTraffic += float64(acc.Traffic)
+
 				for _, w := range acc.Weather {
 					if w == "Clear" {
 						clearAccidents++
@@ -37,14 +45,19 @@ func CountCurrentCriticality(r *models.RouteResponse, criticals map[int][]dbMode
 				continue
 			}
 
+			avgTraffic := totalTraffic / totalAccidents
+			if avgTraffic <= 0 {
+				avgTraffic = 1
+			}
+
 			clearRatio := clearAccidents / totalAccidents
 
 			var probability float64
 			if currentWeatherAccidents == clearAccidents || currentWeatherAccidents == 0 {
-				probability = clearAccidents / length
+				probability = clearAccidents / (length * avgTraffic)
 			} else {
-				probability = (currentWeatherAccidents / length) +
-					(totalAccidents / length * clearRatio)
+				probability = (currentWeatherAccidents / (length * avgTraffic)) +
+					(totalAccidents / (length * avgTraffic) * clearRatio)
 			}
 
 			m.CriticalProbability = F32(float32(probability))

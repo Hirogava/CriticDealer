@@ -16,7 +16,7 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 	dayType, month := funcmonth.WeekdayOrWeekend()
 
 	rows, err := manager.Conn.Query(`
-		SELECT a.id, ARRAY_AGG(w.weather_type) AS weather
+		SELECT a.id, ARRAY_AGG(w.weather_type), a.traffic AS weather
 		FROM accident a
 		JOIN weather w ON a.weather_id = w.id
 		WHERE a.movement_id = ANY($1)
@@ -34,7 +34,7 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 	for rows.Next() {
 		var c dbModels.Critical
 
-		if err := rows.Scan(&c.ID, pq.Array(&c.Weather)); err != nil {
+		if err := rows.Scan(&c.ID, pq.Array(&c.Weather), &c.Traffic); err != nil {
 			return nil, 0, err
 		}
 
@@ -49,12 +49,12 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 
 	var globalKoef float64
 
+	math.CountCurrentCriticality(r, criticals, weather)
+
 	err = manager.Conn.QueryRow(`SELECT dtp_koef FROM global_accident_statistic LIMIT 1`).Scan(&globalKoef)
 	if err != nil {
 		return nil, 0, err
 	}
-
-	math.CountCurrentCriticality(r, criticals, weather)
 
 	return r, globalKoef, nil
 }
