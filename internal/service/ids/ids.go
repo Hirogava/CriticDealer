@@ -17,7 +17,7 @@ func GetCurrentIds(r *models.RouteResponse) []int64 {
 		}
 	}
 
-	fmt.Println(ids)
+	fmt.Println(ids, 3)
 
 	return ids
 }

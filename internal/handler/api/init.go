@@ -81,7 +81,12 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 	logger.Logger.Info("2GIS route data received successfully")
 
 	logger.Logger.Info("Fetching weather data")
-	weatherResp, err := http.Get(fmt.Sprintf("https://api.openweathermap.org/data/3.0/onecall?lat=%g&lon=%g&appid=%s", apiResponse.Query.Points[0].Lat, apiResponse.Query.Points[0].Lon, os.Getenv("WEATHER_KEY")))
+	weatherResp, err := http.Get(fmt.Sprintf(
+		"https://api.openweathermap.org/data/2.5/weather?lat=%g&lon=%g&appid=%s&units=metric&lang=ru",
+		apiResponse.Query.Points[0].Lat,
+		apiResponse.Query.Points[0].Lon,
+		os.Getenv("WEATHER_KEY"),
+	))
 	if err != nil {
 		logger.Logger.Error("Failed to fetch weather data", "error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch from external API"})

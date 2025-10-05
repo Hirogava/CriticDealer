@@ -45,10 +45,11 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 			logger.Logger.Error("Failed to scan database row", "error", err)
 			return nil, 0, err
 		}
+		fmt.Println(c, 1)
 
 		cur = append(cur, c)
 	}
-	fmt.Println(cur)
+	fmt.Println(cur, 2)
 
 	logger.Logger.Info("Retrieved critical maneuvers from database", "count", len(cur))
 	criticals := make(map[int64][]dbModels.Critical)
