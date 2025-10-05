@@ -8,10 +8,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 	"github.com/Hirogava/ParkingDealer/internal/models/routresponse"
 	"github.com/Hirogava/ParkingDealer/internal/repository/postgres/api"
 	"github.com/Hirogava/ParkingDealer/internal/service/funcgraf"
-	"github.com/Hirogava/ParkingDealer/internal/config/logger" 
 
 	"github.com/gin-gonic/gin"
 )
@@ -57,7 +57,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 	reader := bytes.NewReader(jsonData)
 
 	logger.Logger.Info("Sending request to 2GIS Routing API")
-	resp, err := http.Post("http://routing.api.2gis.com/routing/7.0.0/global?key=" + os.Getenv("2GIS_KEY"), "application/json", reader)
+	resp, err := http.Post("http://routing.api.2gis.com/routing/7.0.0/global?key="+os.Getenv("2GIS_KEY"), "application/json", reader)
 	if err != nil {
 		logger.Logger.Error("Failed to fetch from 2GIS API", "error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch from external API"})
@@ -149,7 +149,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error"})
 		return
 	}
-	logger.Logger.Info("Route analysis completed successfully", 
+	logger.Logger.Info("Route analysis completed successfully",
 		"status", finalResult.Status,
 		"route_type", finalResult.Type)
 
