@@ -3,15 +3,18 @@ const key = '9abec63a-4211-4ea4-94ae-8a0d41c26d81'
 
 const modal = ` <div class="bottom-sheet" id="warningSheet">
   <div class="handle"></div>
-  <button class="close-btn" onclick="document.getElementById('warningSheet').remove()">×</button>
+  <button class="close-btn" onclick="close_modal()">×</button>
   <div class="warning">
   <img src="http://localhost:8080/images/dangersmall.png" alt="" class="warn-icon">   
     
     Будьте осторожны!
   </div>
   <p>На данном маршруте при аналогичных погодных условиях зафиксировано большое количество ДТП.</p>
+  <p>Опасные места обозначены знаком <img src="http://localhost:8080/images/danger2gisorange.svg" alt="" class="warn-icon-modal"></p>
   <p>Начинающим водителям рекомендуем выбрать более безопасный маршрут.</p>
 </div>`;
+
+const overlay = document.getElementById("overlay");
 
 const map = new mapgl.Map('container', {
     center: [37.615655, 55.768005],
@@ -53,6 +56,8 @@ resetButton.addEventListener('click', function() {
         });
         markers.length = 0;
         isDangerous = false;
+        // overlay.style.display = "none";
+        close_modal();
     }
 });
 
@@ -98,6 +103,15 @@ function getCoordinates(outcoming_path){
     return [lon, lat]
 
 }
+
+function close_modal(){
+    document.getElementById('warningSheet').remove();
+    overlay.style.display = "none";
+}
+
+overlay.addEventListener("click", () => {
+    close_modal();
+  });
 
 function renderCriticalPoints(maneuvers) {
     maneuvers.forEach((maneuver) => {
@@ -169,6 +183,7 @@ function fetchRoute(points) {
                         new mapgl.Control(map, modal, {
                             position: "bottomCenter"
                         });
+                        overlay.style.display = "block";
                     }
                 } else {
                     console.error("No coordinates found in response");
