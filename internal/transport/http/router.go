@@ -17,6 +17,8 @@ func CreateRouter(manager *mgr.Manager) *gin.Engine {
 
 	r := gin.Default()
 
+	r.Static("/images", "./static/img")
+
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
