@@ -71,5 +71,7 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 		return nil, 0, err
 	}
 
+	r.Weather = weather
+
 	return r, globalKoef, nil
 }

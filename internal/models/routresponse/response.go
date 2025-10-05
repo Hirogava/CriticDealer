@@ -5,6 +5,7 @@ type RouteResponse struct {
 	Query   Query        `json:"query" binding:"required"`
 	Type    string        `json:"type" binding:"required"`
 	Message *string        `json:"message" binding:"omitempty"`
+	Weather []string       `json:"weather" binding:"omitempty"`
 	Result  []ResultItem `json:"result"`
 }
 
