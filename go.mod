@@ -58,6 +58,7 @@ require (
 )
 
 require (
+	github.com/gin-contrib/cors v1.7.6
 	github.com/gin-gonic/gin v1.11.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/hashicorp/errwrap v1.1.0 // indirect
