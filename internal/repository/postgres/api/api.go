@@ -19,6 +19,8 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 	ids := ids.GetCurrentIds(r)
 	dayType, month := funcmonth.WeekdayOrWeekend()
 
+	fmt.Printf("DEBUG SQL PARAMS:\nids=%v\ndayType=%v\nweather=%v\nmonth=%v\nhour=%v\n",
+    ids, dayType, weather, month, funcmonth.GetCurrentHour())
 	rows, err := manager.Conn.Query(`
 		SELECT a.hash, ARRAY_AGG(w.weather_type), a.traffic
 		FROM accident a
@@ -26,8 +28,8 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 		WHERE a.hash = ANY($1)
 			AND a.day_type = $2
 			AND (w.weather_type = ANY($3) OR w.weather_type = 'Clear')
-			AND a.month = $5
-			AND a.dtp_time BETWEEN GREATEST($4 - 1, 1) AND LEAST($4 + 1, 24)
+			AND a.month BETWEEN $5 - 1 AND $5 + 1
+			AND a.dtp_time BETWEEN GREATEST($4 - 2, 1) AND LEAST($4 + 2, 24)
 		GROUP BY a.hash, a.traffic
 	`, pq.Array(ids), dayType, pq.Array(weather), funcmonth.GetCurrentHour(), month)
 	if err != nil {

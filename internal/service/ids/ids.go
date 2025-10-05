@@ -1,7 +1,6 @@
 package ids
 
 import (
-	"fmt"
 	"hash/crc32"
 
 	models "github.com/Hirogava/ParkingDealer/internal/models/routresponse"
@@ -16,8 +15,6 @@ func GetCurrentIds(r *models.RouteResponse) []int64 {
 			ids = append(ids, int64(hash))
 		}
 	}
-
-	fmt.Println(ids, 3)
 
 	return ids
 }

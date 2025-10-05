@@ -62,7 +62,7 @@ func CountCurrentCriticality(r *models.RouteResponse, criticals map[int64][]dbMo
 					(totalAccidents / (length * avgTraffic) * clearRatio)
 			}
 
-			m.CriticalProbability = F32(float32(probability))
+			m.CriticalProbability = F32(float32(probability * 10000))
 			fmt.Println(m.CriticalProbability, 4)
 		}
 	}
