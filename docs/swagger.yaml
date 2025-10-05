@@ -1,6 +1,6 @@
 basePath: /
 definitions:
-  routresponse.AltitudesInfo:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.AltitudesInfo:
     properties:
       elevation_gain:
         type: integer
@@ -13,13 +13,13 @@ definitions:
       min_altitude:
         type: integer
     type: object
-  routresponse.Exclude:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Exclude:
     properties:
       extent:
         type: integer
       points:
         items:
-          $ref: '#/definitions/routresponse.LatLon'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.LatLon'
         type: array
       severity:
         type: string
@@ -30,17 +30,17 @@ definitions:
     - severity
     - type
     type: object
-  routresponse.Features:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Features:
     properties:
       truck:
         type: string
     type: object
-  routresponse.Geometry:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Geometry:
     properties:
       selection:
         type: string
     type: object
-  routresponse.GeometryElement:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.GeometryElement:
     properties:
       angles:
         type: string
@@ -53,19 +53,19 @@ definitions:
       style:
         type: string
     type: object
-  routresponse.GeometryWrapper:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.GeometryWrapper:
     properties:
       geometry:
-        $ref: '#/definitions/routresponse.Geometry'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Geometry'
     type: object
-  routresponse.LatLon:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.LatLon:
     properties:
       lat:
         type: number
       lon:
         type: number
     type: object
-  routresponse.Maneuver:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Maneuver:
     properties:
       comment:
         type: string
@@ -78,7 +78,7 @@ definitions:
       id:
         type: string
       outcoming_path:
-        $ref: '#/definitions/routresponse.OutcomingPath'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.OutcomingPath'
       outcoming_path_comment:
         type: string
       ringroad_exit_number:
@@ -90,7 +90,7 @@ definitions:
       type:
         type: string
     type: object
-  routresponse.OutcomingPath:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.OutcomingPath:
     properties:
       distance:
         type: integer
@@ -98,28 +98,28 @@ definitions:
         type: integer
       geometry:
         items:
-          $ref: '#/definitions/routresponse.GeometryElement'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.GeometryElement'
         type: array
       names:
         items:
           type: string
         type: array
     type: object
-  routresponse.Params:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Params:
     properties:
       pedestrian:
-        $ref: '#/definitions/routresponse.Pedestrian'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Pedestrian'
       truck:
-        $ref: '#/definitions/routresponse.Truck'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Truck'
     type: object
-  routresponse.Pedestrian:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Pedestrian:
     properties:
       use_indoor:
         type: boolean
       use_instructions:
         type: boolean
     type: object
-  routresponse.Query:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Query:
     properties:
       allow_locked_roads:
         type: boolean
@@ -127,7 +127,7 @@ definitions:
         type: integer
       exclude:
         items:
-          $ref: '#/definitions/routresponse.Exclude'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Exclude'
         type: array
       filters:
         properties:
@@ -145,10 +145,10 @@ definitions:
       output:
         type: string
       params:
-        $ref: '#/definitions/routresponse.Params'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Params'
       points:
         items:
-          $ref: '#/definitions/routresponse.QueryPoint'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.QueryPoint'
         type: array
       route_mode:
         type: string
@@ -161,7 +161,7 @@ definitions:
     required:
     - points
     type: object
-  routresponse.QueryPoint:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.QueryPoint:
     properties:
       lat:
         type: number
@@ -174,22 +174,22 @@ definitions:
       type:
         type: string
     type: object
-  routresponse.ResultItem:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.ResultItem:
     properties:
       algorithm:
         type: string
       altitudes_info:
-        $ref: '#/definitions/routresponse.AltitudesInfo'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.AltitudesInfo'
       are_locked_roads_ignored:
         type: boolean
       are_truck_pass_zones_ignored:
         type: boolean
       begin_pedestrian_path:
-        $ref: '#/definitions/routresponse.GeometryWrapper'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.GeometryWrapper'
       end_pedestrian_path:
-        $ref: '#/definitions/routresponse.GeometryWrapper'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.GeometryWrapper'
       features:
-        $ref: '#/definitions/routresponse.Features'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Features'
       filter_road_types:
         items:
           type: string
@@ -198,7 +198,7 @@ definitions:
         type: string
       maneuvers:
         items:
-          $ref: '#/definitions/routresponse.Maneuver'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Maneuver'
         type: array
       reliability:
         type: number
@@ -218,7 +218,7 @@ definitions:
         type: string
       route_points:
         items:
-          $ref: '#/definitions/routresponse.RoutePoint'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.RoutePoint'
         type: array
       total_distance:
         type: integer
@@ -227,7 +227,7 @@ definitions:
       type:
         type: string
       ui_total_distance:
-        $ref: '#/definitions/routresponse.UIDistance'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.UIDistance'
       ui_total_duration:
         type: string
       visited_pass_zone_ids:
@@ -236,25 +236,25 @@ definitions:
         type: array
       waypoints:
         items:
-          $ref: '#/definitions/routresponse.Waypoint'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Waypoint'
         type: array
     type: object
-  routresponse.RoutePoint:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.RoutePoint:
     properties:
       name:
         type: string
       type:
         type: string
     type: object
-  routresponse.RouteResponse:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.RouteResponse:
     properties:
       message:
         type: string
       query:
-        $ref: '#/definitions/routresponse.Query'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.Query'
       result:
         items:
-          $ref: '#/definitions/routresponse.ResultItem'
+          $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.ResultItem'
         type: array
       status:
         type: string
@@ -265,7 +265,7 @@ definitions:
     - status
     - type
     type: object
-  routresponse.Truck:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Truck:
     properties:
       axle_load:
         type: integer
@@ -288,19 +288,19 @@ definitions:
       weight:
         type: integer
     type: object
-  routresponse.UIDistance:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.UIDistance:
     properties:
       unit:
         type: string
       value:
         type: number
     type: object
-  routresponse.Waypoint:
+  github_com_Hirogava_ParkingDealer_internal_models_routresponse.Waypoint:
     properties:
       original_point:
-        $ref: '#/definitions/routresponse.LatLon'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.LatLon'
       projected_point:
-        $ref: '#/definitions/routresponse.LatLon'
+        $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.LatLon'
       transit:
         type: boolean
     type: object
@@ -331,7 +331,7 @@ paths:
         "200":
           description: Успешный анализ маршрута
           schema:
-            $ref: '#/definitions/routresponse.RouteResponse'
+            $ref: '#/definitions/github_com_Hirogava_ParkingDealer_internal_models_routresponse.RouteResponse'
         "400":
           description: Ошибка в данных запроса
           schema:
