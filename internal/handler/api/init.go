@@ -19,30 +19,31 @@ import (
 func InitParams(r *gin.Engine, manager *api.Manager) {
 	v1 := r.Group("/api/v1")
 	{
-		v1.GET("/critical", func(ctx *gin.Context) {
+		v1.POST("/critical", func(ctx *gin.Context) {
 			GetCritical(ctx, manager)
 		})
 	}
 }
 
-// GetCritical обрабатывает запрос на безопасный маршрут
+// GetCritical - API для получения безопасного маршрута
 // @Summary Получить безопасный маршрут с анализом аварийности
 // @Description Запрашивает маршрут у 2GIS, получает погоду и рассчитывает опасность участков
 // @Tags routes
 // @Accept json
 // @Produce json
-// @Param request body map[string]interface{} true "JSON-запрос для API 2GIS"
+// @Param request body routresponse.QueryResponse true "JSON-запрос для API 2GIS"
 // @Success 200 {object} routresponse.RouteResponse "Успешный анализ маршрута"
 // @Failure 400 {string} string "Ошибка в данных запроса"
 // @Failure 500 {string} string "Ошибка обработки маршрута или внешнего API"
-// @Router /api/v1/critical [get]
+// @Router /api/v1/critical [post]
 func GetCritical(ctx *gin.Context, manager *api.Manager) {
-	var response map[string]interface{}
+	var response routresponse.QueryResponse
 
 	err := ctx.BindJSON(&response)
 	if err != nil {
 		logger.Logger.Info("Received request for critical route analysis")
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Error"})
+		return
 	}
 
 	logger.Logger.Debug("JSON request parsed successfully")
@@ -50,6 +51,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 	if err != nil {
 		logger.Logger.Error("Failed to marshal JSON data", "error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Fatal error"})
+		return
 	}
 
 	reader := bytes.NewReader(jsonData)
