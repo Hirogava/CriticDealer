@@ -1,6 +1,7 @@
 package http
 
 import (
+	"github.com/Hirogava/ParkingDealer/internal/handler/api"
 	mgr "github.com/Hirogava/ParkingDealer/internal/repository/postgres/api"
 
 	"github.com/Hirogava/ParkingDealer/internal/config/logger"
@@ -13,9 +14,7 @@ func CreateRouter(manager *mgr.Manager) *gin.Engine {
 
 	r := gin.Default()
 
-	// тут инициализируем роуты
-	// auth.InitAuthHandlers(r, manager) 
-	// manager - работа с БД
+	api.InitParams(r, manager)
 
 	logger.Logger.Info("HTTP router created successfully")
 	return r

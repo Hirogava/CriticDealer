@@ -10,8 +10,7 @@ func WeekdayOrWeekend() (string, int) {
 	weekday := now.Weekday()
 	month := int(now.Month())
 	if weekday == time.Saturday || weekday == time.Sunday {
-		return "weekend", month
+		return "Weekend", month
 	}
-	return "weekday", month
+	return "Weekday", month
 }
-

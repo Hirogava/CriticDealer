@@ -1,4 +1,4 @@
-CREATE TYPE weather AS ENUM (
+CREATE TYPE weather_type AS ENUM (
   'Clear',
   'Clouds',
   'Rain',
@@ -19,7 +19,7 @@ CREATE TYPE day_type AS ENUM (
 
 CREATE TABLE accident (
   id serial PRIMARY KEY,
-  hash BIGINT UNIQUE NOT NULL,
+  hash BIGINT NOT NULL,
   dtp_time integer,
   month integer,
   traffic integer,
@@ -35,7 +35,7 @@ CREATE TABLE global_accident_statistic (
 
 CREATE TABLE weather (
   id serial PRIMARY KEY,
-  weather_type weather
+  weather_type weather_type
 );
 
 ALTER TABLE accident ADD FOREIGN KEY (weather_id) REFERENCES weather (id);

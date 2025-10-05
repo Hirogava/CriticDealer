@@ -34,7 +34,6 @@ type ResultItem struct {
 	Features                *Features        `json:"features" binding:"omitempty"`
 }
 
-
 type Query struct {
 	Exclude       []Exclude `json:"exclude"`
 	NeedAltitudes bool      `json:"need_altitudes"`
@@ -98,7 +97,7 @@ type LatLon struct {
 
 type UIDistance struct {
 	Unit  string  `json:"unit"`
-	Value float64 `json:"value"`
+	Value string `json:"value"`
 }
 
 type Waypoint struct {

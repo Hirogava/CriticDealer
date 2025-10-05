@@ -1,8 +1,9 @@
 package math
 
 import (
+	"fmt"
 	"hash/crc32"
-	
+
 	dbModel "github.com/Hirogava/ParkingDealer/internal/models/db"
 	models "github.com/Hirogava/ParkingDealer/internal/models/routresponse"
 )
@@ -62,6 +63,7 @@ func CountCurrentCriticality(r *models.RouteResponse, criticals map[int64][]dbMo
 			}
 
 			m.CriticalProbability = F32(float32(probability))
+			fmt.Println(m.CriticalProbability)
 		}
 	}
 }

@@ -1,6 +1,9 @@
 package api
 
 import (
+	"fmt"
+
+	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 	dbModels "github.com/Hirogava/ParkingDealer/internal/models/db"
 	models "github.com/Hirogava/ParkingDealer/internal/models/routresponse"
 	"github.com/Hirogava/ParkingDealer/internal/service/funcmonth"
@@ -8,7 +11,6 @@ import (
 	"github.com/Hirogava/ParkingDealer/internal/service/math"
 	"github.com/Hirogava/ParkingDealer/internal/service/weather"
 	"github.com/lib/pq"
-	"github.com/Hirogava/ParkingDealer/internal/config/logger"
 )
 
 func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.WeatherResponse) (*models.RouteResponse, float64, error) {
@@ -24,10 +26,10 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 		WHERE a.hash = ANY($1)
 			AND a.day_type = $2
 			AND (w.weather_type = ANY($3) OR w.weather_type = 'Clear')
-			AND a.month = ANY($5)
+			AND a.month = $5
 			AND a.dtp_time BETWEEN GREATEST($4 - 1, 1) AND LEAST($4 + 1, 24)
-		GROUP BY a.hash;
-	`, pq.Array(ids), dayType, pq.Array(weather), funcmonth.GetCurrentHour(), pq.Array(month))
+		GROUP BY a.hash, a.traffic
+	`, pq.Array(ids), dayType, pq.Array(weather), funcmonth.GetCurrentHour(), month)
 	if err != nil {
 		logger.Logger.Error("Database query failed", "error", err)
 		return nil, 0, err
@@ -46,6 +48,7 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 
 		cur = append(cur, c)
 	}
+	fmt.Println(cur)
 
 	logger.Logger.Info("Retrieved critical maneuvers from database", "count", len(cur))
 	criticals := make(map[int64][]dbModels.Critical)
@@ -65,6 +68,5 @@ func (manager *Manager) GetCriticalManeuvers(r *models.RouteResponse, w *models.
 		return nil, 0, err
 	}
 
-	math.CountCurrentCriticality(r, criticals, weather)
 	return r, globalKoef, nil
 }

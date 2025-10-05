@@ -47,7 +47,7 @@ func main() {
 		logger.Logger.Warn("SERVER_PORT not set, using default port 8080")
 	}
 
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	r.GET("/swagger", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	logger.Logger.Info("Starting HTTP server", "port", serverPort)
 	if err := r.Run(serverPort); err != nil {
 		logger.Logger.Fatal("Failed to start HTTP server", "error", err)

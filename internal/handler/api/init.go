@@ -55,7 +55,7 @@ func GetCritical(ctx *gin.Context, manager *api.Manager) {
 	reader := bytes.NewReader(jsonData)
 
 	logger.Logger.Info("Sending request to 2GIS Routing API")
-	resp, err := http.Post("http://routing.api.2gis.com/routing/7.0.0/global?key=52e0e0ae-e911-4c14-9359-e53ab161888a", "application/json", reader)
+	resp, err := http.Post("http://routing.api.2gis.com/routing/7.0.0/global?key=" + os.Getenv("2GIS_KEY"), "application/json", reader)
 	if err != nil {
 		logger.Logger.Error("Failed to fetch from 2GIS API", "error", err)
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to fetch from external API"})

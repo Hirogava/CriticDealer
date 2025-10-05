@@ -1,16 +1,15 @@
-INSERT INTO weather (weather_type) VALUES (
-    'Clear',
-    'Clouds',
-    'Rain',
-    'Snow',
-    'Drizzle',
-    'Thunderstorm',
-    'Mist',
-    'Fog',
-    'Haze',
-    'Ice',
-    'Freezing_Rain'
-);
+INSERT INTO weather (weather_type) VALUES 
+    ('Clear'),
+    ('Clouds'),
+    ('Rain'),
+    ('Snow'),
+    ('Drizzle'),
+    ('Thunderstorm'),
+    ('Mist'),
+    ('Fog'),
+    ('Haze'),
+    ('Ice'),
+    ('Freezing_Rain');
 
 INSERT INTO accident (hash, dtp_time, month, traffic, day_type, weather_id) VALUES (2675529103, 6, 1, 2332, 'Weekday', 2);
 INSERT INTO accident (hash, dtp_time, month, traffic, day_type, weather_id) VALUES (2675529103, 17, 8, 2017, 'Weekday', 5);
